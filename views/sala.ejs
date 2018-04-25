@@ -1,0 +1,131 @@
+<!doctype html>
+,0033253202<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+
+	  <style>
+		  .chat{
+			  width: 100%;
+			  height: 500px;
+			  background-color: gray;
+			  overflow: scroll;
+		  }
+		  .messages{
+			  display: table-footer-group;
+			     top: 100px;
+		  }
+		  .footer{
+			  width: 100%;
+			  bottom: 0;
+			  padding: 5px;
+			  height: 50px;
+			  position: absolute;
+			  background-color: skyblue;
+		  }
+		  .col-10{
+			  padding: 0;
+		  }
+		  .nav-pills .nav-link.active{
+			  background-color: yellow;
+		  }
+		  a:hover{
+			  background-color: gray;
+		  }
+		  .lista{
+			  overflow: scroll;
+			  height: 500px;
+
+		  }
+		  .flex-column{
+			  flex-flow: column nowrap;
+		  }
+		  .header{
+			  padding: 0;
+			  width: 100%;
+			  height: 50px;
+			  background-color: burlywood;
+		  }
+	  </style>
+  </head>
+  <body>
+	  <div class="container">
+		  <div class="row">
+		  	<div class="col header"></div>
+		  </div>
+		  <div class="row">
+
+			  <div class="col-2" style="padding: 0">
+				<div class="nav flex-column nav-pills lista" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+						<%for(var i = 0; i < amigos.length; i++){%>
+							<%if(amigos[i].nome != user.usuario){%>
+								<a onClick="my(event, 'msgForm<%=[i]%>', '<%=amigos[i].id%>', '<%=userid%>', 'messages<%=[i]%>')" class="nav-link" id="v-pills-home-tab" data-toggle="pill" href="#<%=amigos[i].nome%>" role="tab" aria-controls="v-pills-home" aria-selected="true"><%=amigos[i].nome%></a>
+							<%}%>
+						<%}%>
+
+
+				</div>
+			  </div>
+			  <div class="col-10">
+			  		<div class="tab-content" id="v-pills-tabContent">
+						<%for(var i = 0; i < amigos.length; i++){%>
+							<%if(amigos[i].nome != user.usuario){%>
+						<div class="tab-pane fade show chat" id="<%=amigos[i].nome%>" role="tabpanel" aria-labelledby="v-pills-home-tab">
+							<div class="messages<%=[i]%>"></div>
+							<div class="footer">
+								<form method="POST" id="msgForm<%=[i]%>">
+									<div class="input-group mb-3">
+										<input type="hidden" value="<%=amigos[i].id%>" id="amigoid">
+										<input type="text" class="form-control" id="msg-input<%=[i]%>" placeholder="Envie uma mensagem" aria-label="Recipient's username" aria-describedby="basic-addon2">
+										<div class="input-group-append">
+										<button type="submit" id="enviar" class="btn btn-outline-secondary" >Enviar</button>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+						 <%}%>
+						<%}%>
+					</div>
+			  </div>
+		  </div>
+	  </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="./socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+		var socket = io();
+
+				function my(evet, form, friendid, myid, canalchat){
+
+					texto = '"'+'.'+canalchat+'"';
+					alert(texto);
+					$(texto).append('<li>'+myid+'</li>');
+					
+					//socket.emit('criar sala', {friendid: friendid, myid: myid});
+					//socket.emit('carregar msg', {friendid: friendid, myid: myid});
+				}
+				/*socket.on('connect',function(){
+					socket.emit('carregar msg');
+				});*/
+				socket.on('load msg', function(msg){
+					console.log(msg);
+						$('.messages1').append('<li>'+ msg.msg + '<li>');
+				});
+				
+
+
+    </script>
+  </body>
+</html>
